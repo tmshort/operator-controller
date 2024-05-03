@@ -70,9 +70,9 @@ import (
 	catalogfilter "github.com/operator-framework/operator-controller/internal/catalogmetadata/filter"
 	catalogsort "github.com/operator-framework/operator-controller/internal/catalogmetadata/sort"
 	"github.com/operator-framework/operator-controller/internal/handler"
+	helmpredicate "github.com/operator-framework/operator-controller/internal/helm-operator-plugins/predicate"
 	"github.com/operator-framework/operator-controller/internal/labels"
 	"github.com/operator-framework/operator-controller/internal/packageerrors"
-	helmpredicate "github.com/operator-framework/operator-controller/internal/rukpak/helm-operator-plugins/predicate"
 )
 
 // ClusterExtensionReconciler reconciles a ClusterExtension object
