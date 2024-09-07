@@ -460,31 +460,6 @@ spec:
             description: ClusterExtensionStatus defines the observed state of ClusterExtension.
             properties:
               conditions:
-                description: |-
-                  conditions is a representation of the current state for this ClusterExtension.
-                  The status is represented by a set of "conditions".
-
-                  Each condition is generally structured in the following format:
-                    - Type: a string representation of the condition type. More or less the condition "name".
-                    - Status: a string representation of the state of the condition. Can be one of ["True", "False", "Unknown"].
-                    - Reason: a string representation of the reason for the current state of the condition. Typically useful for building automation around particular Type+Reason combinations.
-                    - Message: a human readable message that further elaborates on the state of the condition
-
-                  The current set of condition types are:
-                    - "Installed", represents whether or not the package referenced in the spec.packageName field has been installed
-                    - "Resolved", represents whether or not a bundle was found that satisfies the selection criteria outlined in the spec
-                    - "Deprecated", represents an aggregation of the PackageDeprecated, ChannelDeprecated, and BundleDeprecated condition types.
-                    - "PackageDeprecated", represents whether or not the package specified in the spec.packageName field has been deprecated
-                    - "ChannelDeprecated", represents whether or not the channel specified in spec.channel has been deprecated
-                    - "BundleDeprecated", represents whether or not the bundle installed is deprecated
-                    - "Unpacked", represents whether or not the bundle contents have been successfully unpacked
-
-                  The current set of reasons are:
-                    - "ResolutionFailed", this reason is set on the "Resolved" condition when an error has occurred during resolution.
-                    - "InstallationFailed", this reason is set on the "Installed" condition when an error has occurred during installation
-                    - "Success", this reason is set on the "Resolved" and "Installed" conditions when resolution and installation/upgrading is successful
-                    - "UnpackSuccess", this reason is set on the "Unpacked" condition when unpacking a bundle's content is successful
-                    - "UnpackFailed", this reason is set on the "Unpacked" condition when an error has been encountered while unpacking the contents of a bundle
                 items:
                   description: Condition contains details for one aspect of the current
                     state of this API Resource.
