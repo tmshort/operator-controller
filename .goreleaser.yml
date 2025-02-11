@@ -20,7 +20,7 @@ builds:
       - ppc64le
       - s390x
   - id: catalogd
-    main: ./catalogd/cmd/catalogd/
+    main: ./cmd/catalogd/
     binary: catalogd
     asmflags: "{{ .Env.GO_BUILD_ASMFLAGS }}"
     gcflags: "{{ .Env.GO_BUILD_GCFLAGS }}"

@@ -86,26 +86,6 @@ export GO_BUILD_LDFLAGS  := -s -w \
 export GO_BUILD_GCFLAGS  := all=-trimpath=${PWD}
 export GO_BUILD_TAGS     := containers_image_openpgp
 
-BUILDCMD = go build -tags '$(GO_BUILD_TAGS)' -ldflags '$(GO_BUILD_LDFLAGS)' -gcflags '$(GO_BUILD_GCFLAGS)' -asmflags '$(GO_BUILD_ASMFLAGS)' -o $(BUILDBIN)/$(notdir $@) ./cmd/$(notdir $@)
-
-.PHONY: build go-build-local $(BINARIES)
-build: go-build-local ## Build binaries for current GOOS and GOARCH.
-go-build-local: $(BINARIES)
-$(BINARIES): BUILDBIN = bin
-$(BINARIES):
-	$(BUILDCMD)
-
-.PHONY: build-linux go-build-linux $(LINUX_BINARIES)
-build-linux: go-build-linux ## Build binaries for GOOS=linux and local GOARCH.
-go-build-linux: $(LINUX_BINARIES)
-$(LINUX_BINARIES): BUILDBIN = bin/linux
-$(LINUX_BINARIES):
-	GOOS=linux $(BUILDCMD)
-
-.PHONY: build-container
-build-container: build-linux ## Build docker image for catalogd.
-	$(CONTAINER_RUNTIME) build -f Dockerfile -t $(IMAGE) ./bin/linux
-
 .PHONY: kind-load
 kind-load: $(KIND) ## Load the built images onto the local cluster
 	$(CONTAINER_RUNTIME) save $(IMAGE) | $(KIND) load image-archive /dev/stdin --name $(KIND_CLUSTER_NAME)

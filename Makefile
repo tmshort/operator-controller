@@ -24,8 +24,8 @@ IMAGE_TAG := devel
 endif
 export IMAGE_TAG
 
-IMG := $(IMAGE_REPO):$(IMAGE_TAG)
-CATALOGD_IMG := $(CATALOG_IMAGE_REPO):$(IMAGE_TAG)
+OPCON_IMG := $(IMAGE_REPO):$(IMAGE_TAG)
+CATD_IMG := $(CATALOG_IMAGE_REPO):$(IMAGE_TAG)
 
 # Define dependency versions (use go.mod if we also use Go code from dependency)
 export CERT_MGR_VERSION := v1.15.3
@@ -259,7 +259,7 @@ e2e-coverage:
 
 .PHONY: kind-load
 kind-load: $(KIND) #EXHELP Loads the currently constructed images into the KIND cluster.
-	$(CONTAINER_RUNTIME) save $(IMG) | $(KIND) load image-archive /dev/stdin --name $(KIND_CLUSTER_NAME)
+	$(CONTAINER_RUNTIME) save $(OPCON_IMG) | $(KIND) load image-archive /dev/stdin --name $(KIND_CLUSTER_NAME)
 	IMAGE_REPO=$(CATALOG_IMAGE_REPO) KIND_CLUSTER_NAME=$(KIND_CLUSTER_NAME) $(MAKE) -C catalogd kind-load
 
 .PHONY: kind-deploy
@@ -300,8 +300,9 @@ export GO_BUILD_FLAGS :=
 export GO_BUILD_LDFLAGS := -s -w \
     -X '$(VERSION_PATH).version=$(VERSION)' \
 
-BINARIES=operator-controller
+BINARIES=operator-controller catalogd
 
+.PHONY: $(BINARIES)
 $(BINARIES):
 	go build $(GO_BUILD_FLAGS) -tags '$(GO_BUILD_TAGS)' -ldflags '$(GO_BUILD_LDFLAGS)' -gcflags '$(GO_BUILD_GCFLAGS)' -asmflags '$(GO_BUILD_ASMFLAGS)' -o $(BUILDBIN)/$@ ./cmd/$@
 
@@ -330,8 +331,8 @@ wait:
 
 .PHONY: docker-build
 docker-build: build-linux  #EXHELP Build docker image for operator-controller and catalog with GOOS=linux and local GOARCH.
-	$(CONTAINER_RUNTIME) build -t $(IMG) -f Dockerfile ./bin/linux
-	IMAGE_REPO=$(CATALOG_IMAGE_REPO) $(MAKE) -C catalogd build-container
+	$(CONTAINER_RUNTIME) build -t $(OPCON_IMG) -f Dockerfile ./bin/linux
+	$(CONTAINER_RUNTIME) build -t $(CATD_IMG) -f catalogd/Dockerfile ./bin/linux
 
 #SECTION Release
 ifeq ($(origin ENABLE_RELEASE_PIPELINE), undefined)
