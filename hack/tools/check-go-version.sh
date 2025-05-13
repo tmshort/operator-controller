@@ -14,6 +14,7 @@ fi
 GO_MAJOR=${MAX_VER[0]}
 GO_MINOR=${MAX_VER[1]}
 GO_PATCH=${MAX_VER[2]}
+OVERRIDE_LABEL="override-go-verdiff"
 
 RETCODE=0
 
@@ -76,5 +77,18 @@ for f in $(find . -name "*.mod"); do
         RETCODE=1
     fi
 done
+
+for l in ${LABELS}; do
+    if [ "$l" == "${OVERRIDE_LABEL}" ]; then
+        if [ ${RETCODE} -eq 1 ]; then
+            echo "Found ${OVERRIDE_LABEL} label, overriding failed results."
+            RETCODE=0
+        fi
+    fi
+done
+
+if [ ${RETCODE} -eq 1 ]; then
+    echo "This test result may be overridden by applying the (${OVERRIDE_LABEL}) label to this PR and re-running the CI job."
+fi
 
 exit ${RETCODE}
