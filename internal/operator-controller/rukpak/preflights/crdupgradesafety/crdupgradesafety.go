@@ -12,6 +12,7 @@ import (
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/crdify/pkg/config"
 	"sigs.k8s.io/crdify/pkg/runner"
 	"sigs.k8s.io/crdify/pkg/validations"
@@ -57,8 +58,16 @@ func (p *Preflight) Install(ctx context.Context, rel *release.Release) error {
 	return p.runPreflight(ctx, rel)
 }
 
+func (p *Preflight) InstallObjects(ctx context.Context, objs []client.Object) error {
+	return p.runPreflightObjects(ctx, objs)
+}
+
 func (p *Preflight) Upgrade(ctx context.Context, rel *release.Release) error {
 	return p.runPreflight(ctx, rel)
+}
+
+func (p *Preflight) UpgradeObjects(ctx context.Context, objs []client.Object) error {
+	return p.runPreflightObjects(ctx, objs)
 }
 
 func (p *Preflight) runPreflight(ctx context.Context, rel *release.Release) error {
@@ -70,7 +79,13 @@ func (p *Preflight) runPreflight(ctx context.Context, rel *release.Release) erro
 	if err != nil {
 		return fmt.Errorf("parsing release %q objects: %w", rel.Name, err)
 	}
+	return p.runPreflightObjects(ctx, relObjects)
+}
 
+func (p *Preflight) runPreflightObjects(ctx context.Context, relObjects []client.Object) error {
+	if len(relObjects) == 0 {
+		return nil
+	}
 	runner, err := runner.New(p.config, p.registry)
 	if err != nil {
 		return fmt.Errorf("creating CRD validation runner: %w", err)

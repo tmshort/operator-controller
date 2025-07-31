@@ -52,7 +52,15 @@ func (mp *mockPreflight) Install(context.Context, *release.Release) error {
 	return mp.installErr
 }
 
+func (mp *mockPreflight) InstallObjects(context.Context, []client.Object) error {
+	return mp.installErr
+}
+
 func (mp *mockPreflight) Upgrade(context.Context, *release.Release) error {
+	return mp.upgradeErr
+}
+
+func (mp *mockPreflight) UpgradeObjects(context.Context, []client.Object) error {
 	return mp.upgradeErr
 }
 

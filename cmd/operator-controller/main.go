@@ -457,6 +457,7 @@ func run() error {
 					BundleRenderer: registryv1.Renderer,
 				},
 			},
+			Preflights: preflights,
 		}
 		ctrlBuilderOpts = append(ctrlBuilderOpts, controllers.WithOwns(&ocv1.ClusterExtensionRevision{}))
 	} else {
