@@ -1729,6 +1729,7 @@ spec:
             - ./catalogd
           image: "quay.io/operator-framework/catalogd:devel"
           name: manager
+          terminationMessagePolicy: FallbackToLogsOnError
           livenessProbe:
             httpGet:
               path: /healthz
@@ -1762,7 +1763,6 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-          terminationMessagePolicy: FallbackToLogsOnError
       serviceAccountName: catalogd-controller-manager
       volumes:
         - emptyDir: {}
@@ -1867,6 +1867,7 @@ spec:
             - /operator-controller
           image: "quay.io/operator-framework/operator-controller:devel"
           name: manager
+          terminationMessagePolicy: FallbackToLogsOnError
           livenessProbe:
             httpGet:
               path: /healthz
@@ -1901,7 +1902,6 @@ spec:
               drop:
               - ALL
             readOnlyRootFilesystem: true
-          terminationMessagePolicy: FallbackToLogsOnError
       serviceAccountName: operator-controller-controller-manager
       volumes:
         - emptyDir: {}

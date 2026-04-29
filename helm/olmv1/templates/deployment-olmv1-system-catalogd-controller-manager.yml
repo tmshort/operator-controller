@@ -89,6 +89,7 @@ spec:
           {{- end }}
           image: "{{ .Values.options.catalogd.deployment.image }}"
           name: manager
+          terminationMessagePolicy: FallbackToLogsOnError
           {{- if not .Values.options.tilt.enabled }}
           livenessProbe:
             httpGet:

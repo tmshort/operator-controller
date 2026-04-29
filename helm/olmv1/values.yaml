@@ -97,4 +97,3 @@ deployments:
         drop:
           - ALL
       readOnlyRootFilesystem: true
-    terminationMessagePolicy: FallbackToLogsOnError
